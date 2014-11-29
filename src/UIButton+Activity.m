@@ -12,11 +12,30 @@
 #define USE_SPINNER_KEY @"useSpinner"
 #define SPINNER_KEY @"spinner"
 
+@interface UIButton (ActivityPrivate)
+
+@property (readonly) UIActivityIndicatorView *spinner;
+
+@end
+
 @implementation UIButton (Activity)
 
--(void)useActivityIndicator:(bool)use
-{
+-(BOOL)useActivityIndicator {
+    BOOL result = NO;
+    id useObject = objc_getAssociatedObject(self, USE_SPINNER_KEY);
+    if ( [useObject isKindOfClass:[NSNumber class] ] )
+    {
+        NSNumber *useNumber = useObject;
+        result = [useNumber boolValue];
+    }
+    return result;
+}
+
+-(void)setUseActivityIndicator:(BOOL)use {
     objc_setAssociatedObject(self, USE_SPINNER_KEY, [NSNumber numberWithBool:use], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    // if we're already disabled and should be displaying the activity indicator
+    [self updateActivityIndicatorVisibility];
 }
 
 -(void)setEnabled:(BOOL)enabled {
@@ -24,20 +43,31 @@
     [self updateActivityIndicatorVisibility];
 }
 
+-(UIActivityIndicatorView *)spinner {
+    UIActivityIndicatorView *result;
+    
+    id spinnerObject = (UIActivityIndicatorView*)objc_getAssociatedObject(self, SPINNER_KEY);
+    if ( [spinnerObject isKindOfClass:[UIActivityIndicatorView class] ] )
+    {
+        result = spinnerObject;
+    } else
+    {
+        // lazy load
+        result = [ [UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+        [result setCenter:CGPointMake(self.bounds.size.width/2,
+                                    self.bounds.size.height/2)];
+        objc_setAssociatedObject(self, SPINNER_KEY, result, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return result;
+}
+
 -(void)updateActivityIndicatorVisibility {
-    NSNumber *useSpinner = (NSNumber*)objc_getAssociatedObject(self, USE_SPINNER_KEY);
-    if( nil == useSpinner || NO == useSpinner.boolValue ) {
+    if(!self.useActivityIndicator) {
         return;
     }
     
-    UIActivityIndicatorView *spinner = (UIActivityIndicatorView*)objc_getAssociatedObject(self, SPINNER_KEY);
+    UIActivityIndicatorView *spinner = self.spinner;
     if( !self.enabled ) { // show spinner
-        if( !spinner ) {
-            spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
-            [spinner setCenter:CGPointMake(self.bounds.size.width/2,
-                                           self.bounds.size.height/2)];
-            objc_setAssociatedObject(self, SPINNER_KEY, spinner, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-        }
         [spinner startAnimating];
         [self addSubview:spinner];
     } else { // self.enabled == true; hide spinner
