@@ -14,7 +14,7 @@
 
 @interface UIButton (Activity)
 
-@property (readwrite) IBInspectable BOOL useActivityIndicator;
+@property (readwrite, setter=useActivityIndicator:, getter=getUseActivityIndicator) IBInspectable BOOL useActivityIndicator;
 -(void)updateActivityIndicatorVisibility;
 
 @end

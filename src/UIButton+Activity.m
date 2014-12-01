@@ -20,7 +20,7 @@
 
 @implementation UIButton (Activity)
 
--(BOOL)useActivityIndicator {
+-(BOOL)getUseActivityIndicator {
     BOOL result = NO;
     id useObject = objc_getAssociatedObject(self, USE_SPINNER_KEY);
     if ( [useObject isKindOfClass:[NSNumber class] ] )
@@ -31,7 +31,7 @@
     return result;
 }
 
--(void)setUseActivityIndicator:(BOOL)use {
+-(void)useActivityIndicator:(BOOL)use {
     objc_setAssociatedObject(self, USE_SPINNER_KEY, [NSNumber numberWithBool:use], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     // if we're already disabled and should be displaying the activity indicator
