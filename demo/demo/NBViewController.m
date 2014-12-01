@@ -24,7 +24,9 @@
     _button.layer.cornerRadius = 2.0;
     
     // turns on the activity indicator for disabled state
-    [_button useActivityIndicator:YES];
+    [_button setUseActivityIndicator:YES];
+    // alternatively one can turn on the activity indicator for disabled state via its property
+    _button.useActivityIndicator = YES;
     
     // usually you want to hide the title in the disabled state
     [_button setTitle:@"" forState:UIControlStateDisabled];
