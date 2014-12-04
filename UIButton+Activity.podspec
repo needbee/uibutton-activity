@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "UIButton+Activity"
-  s.version          = "1.0.0"
+  s.version          = "1.0.1"
   s.summary          = "UIButton that displays an activity indicator when disabled."
   s.homepage         = "https://github.com/needbee/uibutton-activity"
   s.license          = 'MIT'
