@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+#ifndef IBInspectable
+#define IBInspectable
+#endif
+
 @interface UIButton (Activity)
 
--(void)useActivityIndicator:(bool)use;
+@property (readwrite, setter=useActivityIndicator:, getter=getUseActivityIndicator) IBInspectable BOOL useActivityIndicator;
 -(void)updateActivityIndicatorVisibility;
 
 @end
