@@ -11,9 +11,11 @@ The demo/ folder contains a demo project showing UIButton+Activity in use. Open 
 Usage
 =====
 
-Import "UIButton+Activity.h". Then, on any button you want to show an activity indicator when disabled, call
+Import "UIButton+Activity.h". Then, on any button you want to show an activity indicator when disabled, either call
 
 	[_button useActivityIndicator:YES];
+
+If your button lives in a storyboard/xib, you can also set the property on it there.
 
 The activity indicator usually works best if you also set up the button to hide its title in the disabled state:
 
