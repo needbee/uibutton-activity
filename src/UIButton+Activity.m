@@ -20,6 +20,22 @@
 
 @implementation UIButton (Activity)
 
++ (void)load {
+    static dispatch_once_t once_token;
+    dispatch_once(&once_token,  ^{
+        SEL setEnabledSelector = @selector(setEnabled:);
+        SEL swizzledSetEnabledSelector = @selector(swizzled_setEnabled:);
+        Method originalMethod = class_getInstanceMethod(self, setEnabledSelector);
+        Method extendedMethod = class_getInstanceMethod(self, swizzledSetEnabledSelector);
+        method_exchangeImplementations(originalMethod, extendedMethod);
+    });
+}
+
+- (void)swizzled_setEnabled:(BOOL)enabled {
+    [self swizzled_setEnabled:enabled];
+    [self updateActivityIndicatorVisibility];
+}
+
 -(BOOL)getUseActivityIndicator {
     BOOL result = NO;
     id useObject = objc_getAssociatedObject(self, USE_SPINNER_KEY);
@@ -35,11 +51,6 @@
     objc_setAssociatedObject(self, USE_SPINNER_KEY, [NSNumber numberWithBool:use], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     // if we're already disabled and should be displaying the activity indicator
-    [self updateActivityIndicatorVisibility];
-}
-
--(void)setEnabled:(BOOL)enabled {
-    [super setEnabled:enabled];
     [self updateActivityIndicatorVisibility];
 }
 
