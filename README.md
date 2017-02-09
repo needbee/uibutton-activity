@@ -3,6 +3,8 @@ uibutton-activity
 
 UIButton that displays an activity indicator when disabled.
 
+This fork makes sure the indicator is always at the center.
+
 Demo
 ====
 
