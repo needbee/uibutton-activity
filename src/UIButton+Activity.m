@@ -43,6 +43,11 @@
     [self updateActivityIndicatorVisibility];
 }
 
+-(void)setBounds:(CGRect)bounds {
+    [super setBounds:bounds];
+    [self.spinner setCenter:CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2)];
+}
+
 -(UIActivityIndicatorView *)spinner {
     UIActivityIndicatorView *result;
     
